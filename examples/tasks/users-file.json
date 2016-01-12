@@ -1,0 +1,28 @@
+{
+    "version": 1,
+    "schedule": {
+        "type": "simple",
+        "interval": "1s"
+    },
+    "workflow": {
+        "collect": {
+            "metrics": {
+                "/intel/users/logged": {},
+                "/intel/users/logged_avg": {},
+                "/intel/users/logged_max": {},
+                "/intel/users/logged_min": {}                
+            },
+            "config": {
+            },
+            "process": null,
+            "publish": [
+                {
+                    "plugin_name": "file",
+                    "config": {
+                        "file": "/tmp/published_users"
+                    }
+                }
+            ]
+        }
+    }
+}
