@@ -34,7 +34,7 @@ const (
 	Type = plugin.CollectorPluginType
 )
 
-var nsPrefix = []string{"intel", "users"}
+var nsPrefix = []string{"intel", "utmp", "users"}
 
 const (
 	// name of available metrics
