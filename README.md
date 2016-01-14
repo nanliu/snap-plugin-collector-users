@@ -49,7 +49,7 @@ This builds the plugin in `/build/rootfs/`
 ### Collected Metrics
 This plugin has the ability to gather the following metrics:
                                                                                                 
-Metric namespace is `/intel/users/<metric name>/`
+Metric namespace is `/intel/utmp/users/<metric_name>/`
 
 Metric Name | Data Type | Description
 ------------ | ------------- | -------------
@@ -108,10 +108,10 @@ Create a task JSON file (exemplary file in examples/tasks/users-file.json):
     "workflow": {
         "collect": {
             "metrics": {
-                "/intel/users/logged": {},
-                "/intel/users/logged_avg": {},
-                "/intel/users/logged_max": {},
-                "/intel/users/logged_min": {}
+                "/intel/utmp/users/logged": {},
+                "/intel/utmp/users/logged_avg": {},
+                "/intel/utmp/users/logged_max": {},
+                "/intel/utmp/users/logged_min": {}
             },
             "config": {
             },

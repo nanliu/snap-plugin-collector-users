@@ -37,10 +37,10 @@ func (mc *mcMock) Execute() (uint64, error) {
 }
 
 var mockMts = []plugin.PluginMetricType{
-	plugin.PluginMetricType{Namespace_: []string{"intel", "users", "logged"}},
-	plugin.PluginMetricType{Namespace_: []string{"intel", "users", "logged_avg"}},
-	plugin.PluginMetricType{Namespace_: []string{"intel", "users", "logged_min"}},
-	plugin.PluginMetricType{Namespace_: []string{"intel", "users", "logged_max"}},
+	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged"}},
+	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged_avg"}},
+	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged_min"}},
+	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged_max"}},
 }
 
 func TestGetConfigPolicy(t *testing.T) {
