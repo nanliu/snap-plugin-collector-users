@@ -22,6 +22,7 @@ import (
 	"testing"
 
 	"github.com/intelsdi-x/snap/control/plugin"
+	"github.com/intelsdi-x/snap/core"
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/stretchr/testify/mock"
 )
@@ -36,11 +37,11 @@ func (mc *mcMock) Execute() (uint64, error) {
 	return args.Get(0).(uint64), args.Error(1)
 }
 
-var mockMts = []plugin.PluginMetricType{
-	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged"}},
-	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged_avg"}},
-	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged_min"}},
-	plugin.PluginMetricType{Namespace_: []string{"intel", "utmp", "users", "logged_max"}},
+var mockMts = []plugin.MetricType{
+	plugin.MetricType{Namespace_: core.NewNamespace("intel", "utmp", "users", "logged")},
+	plugin.MetricType{Namespace_: core.NewNamespace("intel", "utmp", "users", "logged_avg")},
+	plugin.MetricType{Namespace_: core.NewNamespace("intel", "utmp", "users", "logged_min")},
+	plugin.MetricType{Namespace_: core.NewNamespace("intel", "utmp", "users", "logged_max")},
 }
 
 func TestGetConfigPolicy(t *testing.T) {
@@ -54,7 +55,7 @@ func TestGetConfigPolicy(t *testing.T) {
 }
 
 func TestGetMetricTypes(t *testing.T) {
-	var cfg plugin.PluginConfigType
+	var cfg plugin.ConfigType
 	usersPlugin := New()
 
 	Convey("getting exposed metric types", t, func() {
@@ -136,14 +137,14 @@ func TestCollectMetrics(t *testing.T) {
 
 }
 
-func checkValues(metric plugin.PluginMetricType, mockData []uint64) bool {
+func checkValues(metric plugin.MetricType, mockData []uint64) bool {
 	result := false
 
 	// get last namespace's item
 	last := len(metric.Namespace()) - 1
 	// approximation error, acceptance boundary is (+/-) 0.5
 	approxErr := 0.5
-	switch metric.Namespace()[last] {
+	switch metric.Namespace().Strings()[last] {
 	case nLoggedUsers:
 		// take the last set mock data
 		if metric.Data() == mockData[len(mockData)-1] {
