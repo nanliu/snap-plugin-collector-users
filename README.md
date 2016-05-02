@@ -57,7 +57,7 @@ This builds the plugin in `/build/rootfs/`
 ### Collected Metrics
 This plugin has the ability to gather the following metrics:
 
-Metric namespace | Data Type | Description
+Metric Namespace | Data Type | Description
 ------------ | ------------- | -------------
 /intel/utmp/users/logged | uint64 | A number of users logged-in
 /intel/utmp/users/logged_min | uint64 | A minimum number of logged-in users<sup>(*)</sup>
