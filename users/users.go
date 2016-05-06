@@ -18,18 +18,18 @@ package users
 
 import (
 	"math"
-	"os"
 	"time"
 
 	"github.com/intelsdi-x/snap/control/plugin"
 	"github.com/intelsdi-x/snap/control/plugin/cpolicy"
+	"github.com/intelsdi-x/snap/core"
 )
 
 const (
 	// Name of plugin
 	Name = "users"
 	// Version of plugin
-	Version = 1
+	Version = 2
 	// Type of plugin
 	Type = plugin.CollectorPluginType
 )
@@ -58,21 +58,19 @@ type average struct {
 }
 
 // CollectMetrics returns values of desired metrics defined in mts
-func (users *Users) CollectMetrics(mts []plugin.PluginMetricType) ([]plugin.PluginMetricType, error) {
-	metrics := make([]plugin.PluginMetricType, len(mts))
+func (users *Users) CollectMetrics(mts []plugin.MetricType) ([]plugin.MetricType, error) {
+	metrics := make([]plugin.MetricType, len(mts))
 
 	err := users.getUsersStats()
 	if err != nil {
 		return nil, err
 	}
 
-	hostname, _ := os.Hostname()
 	for i, m := range mts {
-		if v, ok := users.data[parseNamespace(m.Namespace())]; ok {
-			metrics[i] = plugin.PluginMetricType{
+		if v, ok := users.data[parseNamespace(m.Namespace().Strings())]; ok {
+			metrics[i] = plugin.MetricType{
 				Namespace_: m.Namespace(),
 				Data_:      v,
-				Source_:    hostname,
 				Timestamp_: time.Now(),
 			}
 		}
@@ -87,11 +85,11 @@ func (users *Users) GetConfigPolicy() (*cpolicy.ConfigPolicy, error) {
 }
 
 // GetMetricTypes returns the metric types exposed by snap-plugin-collector-users
-func (users *Users) GetMetricTypes(_ plugin.PluginConfigType) ([]plugin.PluginMetricType, error) {
-	mts := []plugin.PluginMetricType{}
+func (users *Users) GetMetricTypes(_ plugin.ConfigType) ([]plugin.MetricType, error) {
+	mts := []plugin.MetricType{}
 
 	for m := range users.data {
-		metric := plugin.PluginMetricType{Namespace_: createNamespace(m)}
+		metric := plugin.MetricType{Namespace_: core.NewNamespace(createNamespace(m)...)}
 		mts = append(mts, metric)
 	}
 	return mts, nil
