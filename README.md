@@ -30,7 +30,7 @@ All OSs currently supported by snap:
 ### Installation
 
 #### Download the plugin binary:
-You can get the pre-built binaries for your OS and architecture at snap's [GitHub Releases](https://github.com/intelsdi-x/snap/releases) page. Download the plugins package from the latest release, unzip and store in a path you want `snapd` to access.
+You can get the pre-built binaries for your OS and architecture at plugins's [GitHub Releases](https://github.com/intelsdi-x/snap-plugin-collector-users/releases) page. Download the plugins package from the latest release, unzip and store in a path you want `snaptel` to access.
 
 #### To build the plugin binary:
 Fork https://github.com/intelsdi-x/snap-plugin-collector-users
@@ -45,7 +45,7 @@ Build the snap users plugin by running make within the cloned repo:
 ```
 $ make
 ```
-This builds the plugin in `/build/rootfs/`
+This builds the plugin in `./build/`
 
 ### Configuration and Usage
 
@@ -71,43 +71,22 @@ By default metrics are gathered once per second.
 
 Example of running snap users collector and writing data to file.
 
-Make sure that your `$SNAP_PATH` is set, if not:
-```
-$ export SNAP_PATH=<snapDirectoryPath>/build
-```
-Other paths to files should be set according to your configuration, using a file you should indicate where it is located.
+Ensure [snap daemon is running](https://github.com/intelsdi-x/snap#running-snap):
+* initd: `sudo service snap-telemetry start`
+* systemd: `sudo systemctl start snap-telemetry`
+* command line: `sudo snapteld -l 1 -t 0 &`
 
-In one terminal window, open the snap daemon (in this case with logging set to 1,  trust disabled):
+Download and load snap plugins:
 ```
-$ $SNAP_PATH/bin/snapd -l 1 -t 0
-```
-In another terminal window:
-
-Load users plugin for collecting:
-```
-$ $SNAP_PATH/bin/snapctl plugin load snap-plugin-collector-users
-Plugin loaded
-Name: users
-Version: 1
-Type: collector
-Signed: false
-Loaded Time: Tue, 12 Jan 2016 05:25:35 EST
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-collector-users/latest/linux/x86_64/snap-plugin-collector-users
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-publisher-file/latest/linux/x86_64/snap-plugin-publisher-file
+$ snaptel plugin load snap-plugin-collector-users
+$ snaptel plugin load snap-plugin-publisher-file
 ```
 
-See available metrics:
+See available metrics for your system
 ```
-$ $SNAP_PATH/bin/snapctl metric list
-```
-
-Load file plugin for publishing:
-```
-$ $SNAP_PATH/bin/snapctl plugin load $SNAP_PATH/plugin/snap-publisher-file
-Plugin loaded
-Name: file
-Version: 3
-Type: publisher
-Signed: false
-Loaded Time: Tue, 12 Jan 2016 05:26:21 EST
+$ snaptel metric list
 ```
 
 Create a task manifest file to use snap-plugin-collector-users plugin (exemplary file in [examples/tasks/] (https://github.com/intelsdi-x/snap-plugin-collector-users/blob/master/examples/tasks/)):
@@ -145,17 +124,17 @@ Create a task manifest file to use snap-plugin-collector-users plugin (exemplary
 
 Create a task:
 ```
-$ $SNAP_PATH/bin/snapctl task create -t users-file.json
+$ snaptel task create -t users-file.json
 Using task manifest to create task
 Task created
 ID: b0ba4a9c-9011-4117-bd25-803b732f8e5b
 Name: Task-b0ba4a9c-9011-4117-bd25-803b732f8e5b
 State: Running
 ```
-See sample output from `snapctl task watch <task_id>`
+See sample output from `snaptel task watch <task_id>`
 
 ```
-$ $SNAP_PATH/bin/snapctl task watch  b0ba4a9c-9011-4117-bd25-803b732f8e5b
+$ snaptel task watch  b0ba4a9c-9011-4117-bd25-803b732f8e5b
 																								
 Watching Task (b0ba4a9c-9011-4117-bd25-803b732f8e5b):
 NAMESPACE                           DATA    TIMESTAMP                                   SOURCE
@@ -171,7 +150,7 @@ These data are published to file and stored there (in this example in /tmp/publi
 
 Stop previously created task:
 ```
-$ $SNAP_PATH/bin/snapctl task stop b0ba4a9c-9011-4117-bd25-803b732f8e5b
+$ snaptel task stop b0ba4a9c-9011-4117-bd25-803b732f8e5b
 Task stopped:
 ID: b0ba4a9c-9011-4117-bd25-803b732f8e5b
 ```
@@ -182,9 +161,7 @@ There isn't a current roadmap for this plugin, but it is in active development. 
 If you have a feature request, please add it as an [issue](https://github.com/intelsdi-x/snap-plugin-collector-users/issues) and/or submit a [pull request](https://github.com/intelsdi-x/snap-plugin-collector-users/pulls).
 
 ## Community Support
-This repository is one of **many** plugins in **snap**, a powerful telemetry framework. See the full project at http://github.com/intelsdi-x/snap.
-
-To reach out to other users, head to the [main framework](https://github.com/intelsdi-x/snap#community-support) or visit [snap Gitter channel](https://gitter.im/intelsdi-x/snap).
+This repository is one of **many** plugins in **Snap**, a powerful telemetry framework. See the full project at http://github.com/intelsdi-x/snap To reach out to other users, head to the [main framework](https://github.com/intelsdi-x/snap#community-support)
 
 ## Contributing
 We love contributions!
